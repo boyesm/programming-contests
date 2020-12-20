@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int jumpHeight;
+vector<int> gameDimensions;
+
+vector<vector<int>> obstacles;
+vector<int> start;
+vector<int> finish;
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+
+
+    return 0;
+}

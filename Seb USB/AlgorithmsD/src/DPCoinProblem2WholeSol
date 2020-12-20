@@ -1,0 +1,67 @@
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		DPCoinProblem2 run = new DPCoinProblem2();
+		int[] coins = {5, 10, 25};
+		int n = 71;
+		int ind = coins.length - 1;
+		MyRet result = run.topDown(coins, n, ind);
+		System.out.println(result.count);
+		System.out.println(result.sample);
+	}
+	
+	HashMap<String, MyRet> memo = new HashMap<String, MyRet>();
+	
+	
+	MyRet topDown(int[] coins, int n, int ind) {
+		String k = Integer.toString(n) + "." + Integer.toString(ind);
+		if (memo.containsKey(k)) {
+			return memo.get(k);
+		}
+		
+		if (n == 0) {
+			memo.put(k, new MyRet(0, "gnd"));
+			return new MyRet(0, "gnd");
+		}
+		
+		if (ind == 0) {
+			MyRet val = new MyRet(n / coins[ind], Integer.toString(n / coins[ind]));
+			memo.put(k, val);
+			if (n % coins[ind] != 0) {
+				val.count = -1;
+				val.sample = "IMPOSSIBLE";
+			}
+			return val;
+		}
+				
+		int cMin = Integer.MAX_VALUE;
+		int x, xMin = -1;
+		String xSample = "";
+		for (x = 0; x <= Math.floor(n / coins[ind]); x ++) {
+			MyRet cVal = topDown(coins, n - x * coins[ind], ind - 1);
+			if (cVal.sample.equals("IMPOSSIBLE")) {
+				continue;
+			}
+			if (cVal.count < cMin) {
+				cMin = cVal.count;
+				xMin = x;
+				xSample = Integer.toString(x) + "." + cVal.sample;
+			}
+		}
+		
+		MyRet ret = new MyRet(cMin + xMin, xSample);
+		if (cMin == Integer.MAX_VALUE) {
+			ret.count = -1;
+			ret.sample = "IMPOSSIBLE";
+		}
+		memo.put(k, ret);
+		return ret;
+	}
+	
+	class MyRet {
+		int count;
+		String sample;
+		MyRet(int a1, String a2) {
+			count = a1;
+			sample = new String(a2);
+		}
+	}
